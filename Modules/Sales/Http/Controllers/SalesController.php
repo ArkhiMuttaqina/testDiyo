@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Helpers\AuthHelpers;
 use Modules\Sales\Entities\Sales;
+use Modules\Sales\Entities\SalesCart;
 
 class SalesController extends Controller
 {
@@ -27,9 +28,27 @@ class SalesController extends Controller
                 $sales = Sales::findOrFail($request->id);
                 if (!$sales) {
                     return response()->json(['error' => 'Sales not found'], 404);
+                } else {
+
+                    $cart =  SalesCart::leftJoin('products', 'sales_cart.item_id', '=', 'products.id')->where('sales_id', '=', $request->id)->select(
+                            'name',
+                            'qty',
+                            'variant',
+                            'price'
+                        )->get();
+
+                    $SalesItem = [
+                        'sales_id' => $sales->sales_id,
+                        'total_price' => $sales->total_price,
+                        'payment_method' => $sales->payment_method,
+                        'created' => $sales->created_at,
+                        'cart' => $cart
+
+                    ];
+                    return response()->json(['data' => $cart]);
                 }
             } else {
-                return response()->json(['data' => $sales]);
+                return response()->json(['error' => 'ID is Required'], 404);
             }
         }
 
