@@ -1,0 +1,9 @@
+{
+    "Presensi": false,
+    "Payslips": false,
+    "Presences": false,
+    "Auth": true,
+    "Inventories": true,
+    "Products": true,
+    "Sales": true
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Payslips",
+    "alias": "payslips",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Payslips\\Providers\\PayslipsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

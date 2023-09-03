@@ -1,0 +1,13 @@
+{
+    "name": "Presences",
+    "alias": "presences",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Presences\\Providers\\PresencesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
