@@ -6,14 +6,16 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Auth\Helpers\AuthHelpers;
-use Modules\Products\Entities\Product;
+
+use Modules\Products\Entities\ProductGroup;
+use Modules\Products\Entities\Products;
 
 class ProductsController extends Controller
 {
 
 
 
-    public function show(Request $request, Product $product)
+    public function show(Request $request, ProductGroup $product)
     {
         $keyCheck = AuthHelpers::checkerParamsv1($request);
 
@@ -23,12 +25,54 @@ class ProductsController extends Controller
             return response()->json(['code' => 401, 'message' => 'Unauthorized Access, Please check API Param'], 401);
         } else {
             if ($request->id != null) {
-                $product = Product::findOrFail($request->id);
+                $product = ProductGroup::findOrFail($request->id);
+
                 if (!$product) {
                     return response()->json(['error' => 'Product not found'], 404);
+                }else{
+                    $productItem = [
+                        'name' => $product->name,
+                        'sku_group' => $product->sku_group,
+                        'description' => $product->description,
+                        'price' => $product->price,
+                        'variant' => Products::where('product_group_id', '=', $product->id)->select(
+                            'name',
+                            'description',
+                            'variant',
+                            'additional_price'
+                        )->get()
+
+                    ];
+                    return response()->json(['data' => $productItem]);
                 }
+
             } else {
-                return response()->json(['data' => $product]);
+                if ($product == null) {
+                    return response()->json(['error' => 'Product not found'], 404);
+                }else{
+                $finalProduct = [];
+
+
+                foreach ($product->get() as $x) {
+
+                    $productItem = [
+                        'name' => $x->name,
+                        'sku_group' => $x->sku_group,
+                        'description' => $x->description,
+                        'price' => $x->price,
+                        'variant' => Products::where('product_group_id', '=', $x->id)->select(
+                            'name',
+                            'description',
+                            'variant',
+                            'additional_price'
+                        )->get()
+                    ];
+
+                    array_push($finalProduct, $productItem);
+                }
+
+                return response()->json(['data' => $finalProduct]);
+                }
             }
         }
     }
@@ -62,7 +106,7 @@ class ProductsController extends Controller
             } else if ($keyCheck == 'falseKey') {
                 return response()->json(['code' => 401, 'message' => 'Unauthorized Access, Please check API Param'], 401);
             } else {
-                $product = Product::create($request->all());
+                $product = Products::create($request->all());
 
                 return response()->json(['message' => 'Product created successfully', 'data' => $product], 201);
             }
@@ -78,27 +122,27 @@ class ProductsController extends Controller
         } else if ($keyCheck == 'falseKey') {
             return response()->json(['code' => 401, 'message' => 'Unauthorized Access, Please check API Param'], 401);
         } else {
-        $product = Product::findOrFail($request->id);
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
+            $product = Products::findOrFail($request->id);
+            if (!$product) {
+                return response()->json(['error' => 'Product not found'], 404);
+            }
 
-        $validator = Validator::make($request->all(), [
-            'product_group_id' => 'nullable|exists:product_group,id',
-            'name' => 'required|string',
+            $validator = Validator::make($request->all(), [
+                'product_group_id' => 'nullable|exists:product_group,id',
+                'name' => 'required|string',
 
-            'description' => 'nullable|string',
-            'variant' => 'nullable|string',
-            'additional_price' => 'nullable|integer',
-        ]);
+                'description' => 'nullable|string',
+                'variant' => 'nullable|string',
+                'additional_price' => 'nullable|integer',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        }
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 400);
+            }
 
-        $product->update($request->all());
+            $product->update($request->all());
 
-        return response()->json(['message' => 'Product updated successfully', 'data' => $product]);
+            return response()->json(['message' => 'Product updated successfully', 'data' => $product]);
         }
     }
 
@@ -111,15 +155,15 @@ class ProductsController extends Controller
         } else if ($keyCheck == 'falseKey') {
             return response()->json(['code' => 401, 'message' => 'Unauthorized Access, Please check API Param'], 401);
         } else {
-        $product = Product::findOrFail($request->id);
+            $product = Products::findOrFail($request->id);
 
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
+            if (!$product) {
+                return response()->json(['error' => 'Product not found'], 404);
+            }
 
-        $product->delete();
+            $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully']);
+            return response()->json(['message' => 'Product deleted successfully']);
         }
     }
 }

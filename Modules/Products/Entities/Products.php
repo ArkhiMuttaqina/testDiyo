@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Product extends Model
+class Products extends Model
 {
     use HasFactory;
 
@@ -16,10 +16,9 @@ class Product extends Model
     protected $fillable = [
         'product_group_id',
         'name',
-        'sku',
         'description',
         'variant',
-        'price',
+        'additional_price',
     ];
 
     public function productGroup()

@@ -16,7 +16,8 @@ class ProductGroup extends Model
     protected $fillable = [
         'name',
         'sku_group',
-        'description'
+        'description',
+        'price'
     ];
 
     // Tentukan hubungan dengan model 'Product'

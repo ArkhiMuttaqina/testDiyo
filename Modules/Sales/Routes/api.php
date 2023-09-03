@@ -14,7 +14,7 @@ use Modules\Sales\Http\Controllers\SalesController;
 |
 */
 
-Route::middleware('auth:api')->get('/sales', function (Request $request) {
+Route::prefix('sales')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/show', [SalesController::class, 'show']);
     Route::post('/store', [SalesController::class, 'store']);
     Route::post('/update', [SalesController::class, 'update']);

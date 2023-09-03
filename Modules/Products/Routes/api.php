@@ -14,7 +14,7 @@ use Modules\Products\Http\Controllers\ProductsController;
 |
 */
 
-Route::middleware('auth:api')->get('/products', function (Request $request) {
+Route::prefix('products')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/show', [ProductsController::class, 'show']);
     Route::post('/store', [ProductsController::class, 'store']);
     Route::post('/update', [ProductsController::class, 'update']);

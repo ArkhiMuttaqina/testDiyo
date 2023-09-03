@@ -81,7 +81,7 @@ class AuthHelpers
             $data = 'falseKey';
         } else {
             $checkKey = User::where('key_digest', '=', $request->key)->select('key_digest')->first();
-            if($checkKey == null || count($checkKey) == 0){
+            if($checkKey == null){
                 $data = 'falseKey';
             }else{
                 $data = 'success';
