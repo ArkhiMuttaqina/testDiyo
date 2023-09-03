@@ -11,6 +11,3 @@ php artisan optimize
 
 ## langkah empat 
 php artisan migrate
-
-## langkah terakhir untuk melakukan test
-php artisan test 
