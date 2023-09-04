@@ -34,7 +34,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "modules/Auth/helpers/AuthHelpers.php"
+            "Modules/Auth/helpers/AuthHelpers.php"
         ]
 
     },
