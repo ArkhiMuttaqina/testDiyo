@@ -55,7 +55,22 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'error' => 404, 'message' => 'Not Found'
                 ], 404);
+            }else if ($request->is('/*')) {
+                if ($e->getPrevious() instanceof ModelNotFoundException) {
+                    /** @var ModelNotFoundException $modelNotFound */
+                    $modelNotFound = $e->getPrevious();
+                    if ($modelNotFound->getModel() === Product::class) {
+                        return response()->json([
+                            'message' => 'Modules not found.'
+                        ], 404);
+                    }
+                }
+
+                return response()->json([
+                    'error' => 404, 'message' => 'Not Found'
+                ], 404);
             }
         });
     }
+
 }
