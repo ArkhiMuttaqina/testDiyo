@@ -32,10 +32,7 @@
             "Modules\\": "Modules/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        },
-        "files": [
-            "modules/Auth/helpers/AuthHelpers.php"
-        ]
+        }
 
     },
     "autoload-dev": {
